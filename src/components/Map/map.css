@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container {
+    margin-top: 30px;
+}
+
+.tableContainer {
+    width: 70vw;
+    margin-top: 1vh;
+    display: flex;
+    justify-content: space-around;
+    margin-left: 10%;
+}
+
+.mapcss {
+    padding: 0;
+    margin: 0;
+    height: 70vh;
+    width: 75vw;
+    background-color: #FFFFFF;
+}
+
+.rowTable {
+    padding: 0;
+    margin: 0;
+    height: 70vh;
+    width: 65vw;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.textAlign {
+    text-align: center;
+}
+
+

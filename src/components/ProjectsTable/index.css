@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.containerTable {
+
+}
+
+.containerTable {
+}
+
+.table {
+    background-color: #00A0FF;
+}
+
+.tableHeaderTitle {
+    @apply py-4;
+}
+
+.tableHeaderData {
+    @apply py-3;
+}
+
