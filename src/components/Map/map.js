@@ -12,6 +12,7 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import MapView from '@arcgis/core/views/MapView';
 import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from '../ProjectsTable';
+import { Box, Dialog, DialogTitle, FormControl, FormLabel, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 
 
 const MapComponent = ({setNotification}) => {
@@ -38,6 +39,27 @@ const MapComponent = ({setNotification}) => {
     const [mapView, setMapView] = useState(null);
     const [filtro, setFiltro] = useState("año");
     const [point, setPoint] = useState({long: 0, lat: 0})
+
+    const [isVisible, setIsVisible] = useState(false);
+    const [type, setType] = useState("Industria");
+
+    const [coeficiente, setCoeficiente] = useState(null);
+
+    const [quantity, setQuantity] = useState(0);
+
+    useEffect(() => {
+      switch (type) {
+        case "Industria":
+          setCoeficiente(20)
+          break;
+        case "Casa":
+          setCoeficiente(10)
+          break;
+        default:
+          setCoeficiente(0)
+          break;
+      }
+    }, [type])
 
     useEffect(() => {
 
@@ -352,6 +374,18 @@ const MapComponent = ({setNotification}) => {
         setProjectsInfo([]);
     }
 
+    const onClose = () => {
+      setIsVisible(false);
+    }
+
+    const handleChangeType = e => {
+      setType(e.target.value)
+    }
+
+    const handleOnCalculate = () => {
+      console.log(type,coeficiente,quantity)
+    }
+
     return (
         <div className="container mx-auto">
 
@@ -406,6 +440,7 @@ const MapComponent = ({setNotification}) => {
                         </table>
                     </div>
 
+                    
                     <div>
                         <Input type="number" onChange={(string, event) => {
                             let newState = point;
@@ -427,6 +462,91 @@ const MapComponent = ({setNotification}) => {
                             createPointAndQuery();
                         }} className={"m-5 bg-bgmarn text-textmarn"}>Buscar</Button>
                     </div>
+
+                    {balance && (
+
+
+
+
+                      <Stack width="100%" border="2px black solid" mt={1} ml={2} alignItems="center" justifyContent="center">
+
+                        
+                        <Button
+                          onClick={()=>setIsVisible(true)}
+                        >
+                          TODO:
+                        </Button>
+                        <Dialog
+                          title={"Test"}
+                          open={isVisible}
+                          onClose={onClose}
+                          fullWidth={true}
+                        >
+                          <Box mt={2} p={2}>
+                            <Typography
+                              mb={2}
+                            >
+                              Seleccione tipo de industria TODO: 
+                            </Typography>
+
+                            <FormControl fullWidth>
+                              <InputLabel id="type">Tipo</InputLabel>
+                              <Select
+                                labelId="type"
+                                id="type-select"
+                                value={type}
+                                label="Tipo"
+                                onChange={handleChangeType}
+                                >
+                                <MenuItem value={"Industria"}>industria</MenuItem>
+                                <MenuItem value={"Casa"}>casa</MenuItem>
+                              </Select>
+                            </FormControl>
+
+                          </Box>
+                          <Box pl={2}>
+                            <Typography
+                              mb={2}
+                            >
+                              Coeficiente de TODO: {coeficiente}
+                            </Typography>
+                          </Box>
+
+                          <Box pl={2} mb={2}>
+                            <Typography
+                              mb={2}
+                            >
+                              Ingrese metros cubicos TODO:
+                            </Typography>
+                            <TextField 
+                              id="standard-basic"
+                              label="metros cubicos:"
+                              variant="standard"
+                              type="number"
+                              required
+                              onChange={e=>setQuantity(e.target.value)}
+                            />
+                            <h1>{quantity}</h1>
+
+                          </Box>
+
+                          <Stack width="80%" m={2}>
+                            <Button
+                              size='large'
+                              variant="contained"
+                              width="100%"
+                              onClick={handleOnCalculate}
+                            >
+                              Calcular
+                            </Button>
+                          </Stack>
+                        </Dialog>
+
+                      </Stack>
+
+
+                      )}
+
 
                 </div>
             </div>
