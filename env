@@ -1,4 +1,0 @@
-REACT_APP_PROYECTOS="https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/capa_proyectos_consumo_anual/FeatureServer/0"
-REACT_APP_CUENCAS="https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/cuencas_con_estadistica_y_geometrias_corregidas_area_volumen_calculados/FeatureServer/0"
-REACT_APP_ARCGIS_API_KEY="AAPK130718044ba447158ccb63084f9e096cy3JrnYcto9V7bzMLeX479vHCWppadHLBnhFSflA77wI9TDAKZOpA3i-BgXCiSmZH"
-PORT=

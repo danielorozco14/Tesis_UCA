@@ -12,7 +12,7 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import MapView from '@arcgis/core/views/MapView';
 import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from '../ProjectsTable';
-import { Box, Dialog, DialogTitle, FormControl, FormLabel, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import { Box, Dialog, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 
 
 const MapComponent = ({setNotification}) => {
@@ -530,16 +530,18 @@ const MapComponent = ({setNotification}) => {
 
                           </Box>
 
-                          <Stack width="80%" m={2}>
+                        <Stack mb={2}>
                             <Button
-                              size='large'
-                              variant="contained"
-                              width="100%"
-                              onClick={handleOnCalculate}
+                                size='large'
+                                variant="contained"         
+                                onClick={handleOnCalculate}
+                                xs={8}
                             >
-                              Calcular
+                                Calcular
                             </Button>
-                          </Stack>
+                        </Stack>  
+                        
+                          
                         </Dialog>
 
                       </Stack>
