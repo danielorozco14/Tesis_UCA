@@ -56,6 +56,8 @@ const MapComponent = ({ setNotification }) => {
   const [point, setPoint] = useState({ long: 0, lat: 0 });
 
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisible2, setIsVisible2] = useState(false);
+
   const [type, setType] = useState("Consumo poblacional");
 
   const [coeficiente, setCoeficiente] = useState(null);
@@ -65,18 +67,14 @@ const MapComponent = ({ setNotification }) => {
   const [estado, setEstado] = useState("");
 
   useEffect(() => {
-    console.log("index dentro de effect",explotationIndex)
     switch (true) {
       case (explotationIndex < 0.8):
-        console.log("menos de 0.8",explotationIndex)
         setEstado("Buen estado cuantitatvo")
         break;
       case (explotationIndex > 0.8 && explotationIndex < 1):
-        console.log("entre de 0.8 y 1",explotationIndex)
         setEstado("En proceso de sobre-explotación")
         break;
       case (explotationIndex > 1):
-        console.log("mas de 1",explotationIndex)
         setEstado("Sobre-explotación")
         break;
       default:
@@ -402,6 +400,10 @@ const MapComponent = ({ setNotification }) => {
     setIsVisible(false);
   };
 
+  const onClose2 = () => {
+    setIsVisible2(false);
+  };
+
   const handleChangeType = (e) => {
     setType(e.target.value);
   };
@@ -410,6 +412,9 @@ const MapComponent = ({ setNotification }) => {
     const volumenNumber = balance.volumen_cuenca.replace(/\,/g,'');
 
     setExplotationIndex((quantity/volumenNumber * 1).toFixed(2));
+
+    setIsVisible(false);
+    setIsVisible2(true);
   };
 
   return (
@@ -583,43 +588,52 @@ const MapComponent = ({ setNotification }) => {
             </Stack>
           )}
 
-          <div className="m-auto ml-5 bg-white overflow-hidden shadow-x1 sm:rounded-lg">
-            <table className="bg-bgmarn table-fixed">
-              <tr className="border border-textmarn">
-                <th className="py-4 bg-bgmarn text-textmarn">
-                  Entrada por recarga hídrica potencial:
-                </th>
-                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
-                  {!balance ? null : `${balance.volumen_cuenca} m3`}
-                </td>
-              </tr>
-              <tr className="border border-textmarn">
-                <th className="py-4 bg-bgmarn text-textmarn">
-                  Nuevo consumo estimado de proyectos:
-                </th>
-                <td className="p-5 flex justify-center bg-bgmarn text-textmarn">
-                  {/* <NumericFormat value={quantity} allowLeadingZeros thousandSeparator="," />; */}
-                  {quantity.toLocaleString('en-US', {minimumFractionDigits: 2})} m3
-                </td>
-              </tr>
-              <tr className="border border-textmarn">
-                <th className="py-4 bg-bgmarn text-textmarn">
-                  Índice de explotación estimado:
-                </th>
-                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
-                  {explotationIndex}
-                </td>
-              </tr>
-              <tr className="border border-textmarn">
-                <th className="py-4 bg-bgmarn text-textmarn">Estado estimado:</th>
-                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
-                  {estado}
-                </td>
-              </tr>
-            </table>
-          </div>
+          <Dialog
+            title={"Test"}
+            open={isVisible2}
+            onClose={onClose2}
+          >
+            <div className="m-auto bg-white overflow-hidden shadow-x1 sm:rounded-lg">
+              <table className="bg-bgmarn table-fixed">
+                <tr className="border border-textmarn">
+                  <th className="py-4 bg-bgmarn text-textmarn">
+                    Entrada por recarga hídrica potencial:
+                  </th>
+                  <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
+                    {!balance ? null : `${balance.volumen_cuenca} m3`}
+                  </td>
+                </tr>
+                <tr className="border border-textmarn">
+                  <th className="py-4 bg-bgmarn text-textmarn">
+                    Nuevo consumo estimado de proyectos:
+                  </th>
+                  <td className="p-5 flex justify-center bg-bgmarn text-textmarn">
+                    {/* <NumericFormat value={quantity} allowLeadingZeros thousandSeparator="," />; */}
+                    {quantity.toLocaleString('en-US', {minimumFractionDigits: 2})} m3
+                  </td>
+                </tr>
+                <tr className="border border-textmarn">
+                  <th className="py-4 bg-bgmarn text-textmarn">
+                    Índice de explotación estimado:
+                  </th>
+                  <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
+                    {explotationIndex}
+                  </td>
+                </tr>
+                <tr className="border border-textmarn">
+                  <th className="py-4 bg-bgmarn text-textmarn">Estado estimado:</th>
+                  <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
+                    {estado}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </Dialog>
+
+
         </div>
       </div>
+      
       <div className={"row tableContainer"}>
         <Table projects={projects} loading={loadingProjects} />
 
