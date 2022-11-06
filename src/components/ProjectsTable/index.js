@@ -8,6 +8,7 @@ import Table from 'rsuite/Table';
 import {ExportCSV} from "../ExportCSV/ExportCSV";
 
 const ProjectsTable = ({loading, projects}) => {
+  console.log([projects])
 
     const [limit, setLimit] = React.useState(10);
     const [page, setPage] = React.useState(1);

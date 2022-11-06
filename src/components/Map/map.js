@@ -22,6 +22,7 @@ import {
   Box,
   Dialog,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -633,35 +634,46 @@ const MapComponent = ({ setNotification }) => {
 
         </div>
       </div>
+
+      <Grid container spacing={1} direction="row">
+        <Grid item xs={12}>
+          <div className={"row tableContainer"}>
+            <Table projects={projects} loading={loadingProjects} />
+
+            {/* <div>
+              <ExportCSV
+                csvData={projects}
+                fileName={"archivo"}
+                setNotification={setNotification}
+              />
+            </div>
+
+            <div>
+              <Dropdown
+                title={`Filtrar por: ${filtro}`}
+                onSelect={(eventKey, event) => {
+                  setFiltro(eventKey);
+                  updateProjectsInfo(eventKey);
+                }}
+              >
+                <Dropdown.Item eventKey={"año"}>
+                  Filtrar por año mas reciente
+                </Dropdown.Item>
+                <Dropdown.Item eventKey={"consumo"}>
+                  Filtrar por mayor consumo
+                </Dropdown.Item>
+              </Dropdown>
+            </div> */}
+          </div>
+        </Grid>
+
+        <Grid item xs={12}>
+          <div className={"row tableContainer"}>
+            
+          </div>
+        </Grid>
+      </Grid>
       
-      <div className={"row tableContainer"}>
-        <Table projects={projects} loading={loadingProjects} />
-
-        <div>
-          <ExportCSV
-            csvData={projects}
-            fileName={"archivo"}
-            setNotification={setNotification}
-          />
-        </div>
-
-        <div>
-          <Dropdown
-            title={`Filtrar por: ${filtro}`}
-            onSelect={(eventKey, event) => {
-              setFiltro(eventKey);
-              updateProjectsInfo(eventKey);
-            }}
-          >
-            <Dropdown.Item eventKey={"año"}>
-              Filtrar por año mas reciente
-            </Dropdown.Item>
-            <Dropdown.Item eventKey={"consumo"}>
-              Filtrar por mayor consumo
-            </Dropdown.Item>
-          </Dropdown>
-        </div>
-      </div>
     </div>
   );
 };
