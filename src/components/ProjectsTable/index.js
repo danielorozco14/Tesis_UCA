@@ -8,7 +8,6 @@ import Table from 'rsuite/Table';
 import {ExportCSV} from "../ExportCSV/ExportCSV";
 
 const ProjectsTable = ({loading, projects}) => {
-  console.log([projects])
 
     const [limit, setLimit] = React.useState(10);
     const [page, setPage] = React.useState(1);
@@ -24,7 +23,6 @@ const ProjectsTable = ({loading, projects}) => {
         const end = start + limit;
         return i >= start && i < end;
     });
-
 
     const tableHeader = {background:"#303845", color:"white", fontWeight: "900"};
     return (
@@ -54,12 +52,12 @@ const ProjectsTable = ({loading, projects}) => {
                         <Table.HeaderCell style={tableHeader}>Consumo anual (metros cubicos)</Table.HeaderCell>
                         <Table.Cell dataKey="consumo_anual_m3"/>
                     </Table.Column>
-                    {/* <Table.Column>
+                    <Table.Column>
                         <Table.HeaderCell style={tableHeader} >
                             <ExportCSV csvData={projects} fileName={"archivo"} />
                         </Table.HeaderCell>
                         <Table.Cell/>
-                    </Table.Column>*/}
+                    </Table.Column>
                 </Table>
 
                 <div style={{padding: 12}}>

@@ -30,6 +30,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import ProjectsTable from "../ProjectsTable";
+import { EstimatesTable } from "../EstimatesTable/EstimatesTable";
+import * as XLSX from 'xlsx';
+
 
 const MapComponent = ({ setNotification }) => {
   const mapRef = useRef();
@@ -66,6 +70,7 @@ const MapComponent = ({ setNotification }) => {
   const [quantity, setQuantity] = useState(0);
   const [explotationIndex, setExplotationIndex] = useState(0);
   const [estado, setEstado] = useState("");
+  const [estimates, setEstimates] = useState([]);
 
   useEffect(() => {
     switch (true) {
@@ -414,9 +419,25 @@ const MapComponent = ({ setNotification }) => {
 
     setExplotationIndex((quantity/volumenNumber * 1).toFixed(2));
 
+    setEstimates( estimate => [...estimates, {type,quantity,explotationIndex,estado} ]);
+
     setIsVisible(false);
     setIsVisible2(true);
   };
+
+  const changeHandler = async  (e) => {
+
+    const myFile = e.target.files[0];
+    // setIsFilePicked(true);
+    // setSelectedFileType(e.target.files[0].type);
+    const f = await myFile.arrayBuffer();
+    const wb = XLSX.read(f);
+    // const fileReader = new FileReader();
+
+    const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+    const data = XLSX.utils.sheet_to_json(ws);
+    console.log(data) // generate objects // update st
+};
 
   return (
     <div className="container mx-auto">
@@ -522,13 +543,16 @@ const MapComponent = ({ setNotification }) => {
           {balance && (
             <Stack
               width="100%"
-              border="2px black solid"
               mt={1}
-              ml={2}
-              alignItems="center"
-              justifyContent="center"
+              
+     
             >
-              <Button onClick={() => setIsVisible(true)}>TODO:</Button>
+                <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible(true)}>Estimar</Button>
+              <Stack ml={2} direction="column" width="90%">
+                <ExportCSV csvData={estimates} fileName={"archivo"} />
+                <input className='form-control' type="file" name="file" placeholder="Hola Mundo" onChange={changeHandler}/>
+              </Stack>
+
               <Dialog
                 title={"Test"}
                 open={isVisible}
@@ -635,7 +659,7 @@ const MapComponent = ({ setNotification }) => {
         </div>
       </div>
 
-      <Grid container spacing={1} direction="row">
+      <Grid container spacing={1} direction="row" mb={5}>
         <Grid item xs={12}>
           <div className={"row tableContainer"}>
             <Table projects={projects} loading={loadingProjects} />
@@ -667,11 +691,17 @@ const MapComponent = ({ setNotification }) => {
           </div>
         </Grid>
 
-        <Grid item xs={12}>
+        {estimates.length > 0 && (
+          <Grid item xs={12}>
           <div className={"row tableContainer"}>
-            
+            <EstimatesTable estimates={estimates}/>
           </div>
-        </Grid>
+          </Grid>
+        )}
+
+       
+
+
       </Grid>
       
     </div>
