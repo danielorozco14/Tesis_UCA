@@ -549,7 +549,7 @@ const MapComponent = ({ setNotification }) => {
               <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible(true)}>Estimar</Button>
               <Stack ml={2} direction="column" width="90%">
                 <ExportCSV csvData={estimates} fileName={"archivo"} />              
-                  <input className='form-control' type="file" accept="xlsx, xls" multiple="false" name="file"  style={{marginTop:"1rem"}} onChange={changeHandler}/>                
+                  <input className='form-control' type="file" accept="xlsx, xls" multiple="false" name="file"  style={{marginTop:"1rem", marginBottom:"1rem"}} onChange={changeHandler}/>                
               </Stack>
               
 
