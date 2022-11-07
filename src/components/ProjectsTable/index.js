@@ -52,12 +52,16 @@ const ProjectsTable = ({loading, projects}) => {
                         <Table.HeaderCell style={tableHeader}>Consumo anual (metros cubicos)</Table.HeaderCell>
                         <Table.Cell dataKey="consumo_anual_m3"/>
                     </Table.Column>
-                    <Table.Column>
+                    {
+                    /*<Table.Column>
                         <Table.HeaderCell style={tableHeader} >
                             <ExportCSV csvData={projects} fileName={"archivo"} />
                         </Table.HeaderCell>
                         <Table.Cell/>
-                    </Table.Column>
+                      </Table.Column>
+                        */
+                    }
+                    
                 </Table>
 
                 <div style={{padding: 12}}>

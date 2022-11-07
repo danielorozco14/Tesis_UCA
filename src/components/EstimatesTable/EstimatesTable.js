@@ -13,7 +13,7 @@ export const EstimatesTable = ({ estimates }) => {
     <div className="containerTable">
       <div>
         <Table
-          width={1200}
+          width={1000}
           height={400}
           data={estimates}
           loading={false}
@@ -21,23 +21,23 @@ export const EstimatesTable = ({ estimates }) => {
           autoHeight={true}
           loading={false}
         >
-          <Table.Column align="center" width={300}>
+          <Table.Column align="center" width={250}>
             <Table.HeaderCell style={tableHeader}>Consumo</Table.HeaderCell>
             <Table.Cell dataKey="type" />
           </Table.Column>
           {
-            <Table.Column width={300} align="center" fixed>
+            <Table.Column width={250} align="center" fixed>
               <Table.HeaderCell style={tableHeader}>Cantidad</Table.HeaderCell>
               <Table.Cell dataKey="quantity" />
             </Table.Column>
           }
 
-          <Table.Column align="center" width={300}>
+          <Table.Column align="center" width={250}>
             <Table.HeaderCell style={tableHeader}>Indice</Table.HeaderCell>
             <Table.Cell dataKey="explotationIndex" />
           </Table.Column>
 
-          <Table.Column width={300} align="center" fixed="right">
+          <Table.Column width={250} align="center" fixed="right">
             <Table.HeaderCell style={tableHeader}>
               Estado
             </Table.HeaderCell>

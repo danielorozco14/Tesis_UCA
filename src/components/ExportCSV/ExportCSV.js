@@ -18,7 +18,7 @@ export const ExportCSV = ({csvData, fileName, setNotification}) => {
     }
 
     return (
-        <Button appearance="primary" size="xs" onClick={(e) => {
+        <Button appearance="primary" size="md" onClick={(e) => {
 
             if (csvData.length > 0) {
                 exportToCSV(csvData, fileName)

@@ -545,14 +545,13 @@ const MapComponent = ({ setNotification }) => {
             <Stack
               width="100%"
               mt={1}
-              
-     
             >
-                <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible(true)}>Estimar</Button>
+              <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible(true)}>Estimar</Button>
               <Stack ml={2} direction="column" width="90%">
-                <ExportCSV csvData={estimates} fileName={"archivo"} />
-                <input className='form-control' type="file" name="file" placeholder="Hola Mundo" onChange={changeHandler}/>
+                <ExportCSV csvData={estimates} fileName={"archivo"} />              
+                  <input className='form-control' type="file" accept="xlsx, xls" multiple="false" name="file"  style={{marginTop:"1rem"}} onChange={changeHandler}/>                
               </Stack>
+              
 
               <Dialog
                 title={"Test"}
@@ -661,48 +660,14 @@ const MapComponent = ({ setNotification }) => {
       </div>
 
       <Grid container spacing={1} direction="row" mb={5}>
-        <Grid item xs={12}>
-          <div className={"row tableContainer"}>
-            <Table projects={projects} loading={loadingProjects} />
-
-            {/* <div>
-              <ExportCSV
-                csvData={projects}
-                fileName={"archivo"}
-                setNotification={setNotification}
-              />
+          <div className={"row tableContainer"} >
+            <div className={"tableSpace"}>
+              <Table projects={projects} loading={loadingProjects}  /> 
             </div>
-
-            <div>
-              <Dropdown
-                title={`Filtrar por: ${filtro}`}
-                onSelect={(eventKey, event) => {
-                  setFiltro(eventKey);
-                  updateProjectsInfo(eventKey);
-                }}
-              >
-                <Dropdown.Item eventKey={"año"}>
-                  Filtrar por año mas reciente
-                </Dropdown.Item>
-                <Dropdown.Item eventKey={"consumo"}>
-                  Filtrar por mayor consumo
-                </Dropdown.Item>
-              </Dropdown>
-            </div> */}
+            {estimates.length > 0 && (  
+                <EstimatesTable estimates={estimates} />
+            )} 
           </div>
-        </Grid>
-
-        {estimates.length > 0 && (
-          <Grid item xs={12}>
-          <div className={"row tableContainer"}>
-            <EstimatesTable estimates={estimates}/>
-          </div>
-          </Grid>
-        )}
-
-       
-
-
       </Grid>
       
     </div>
