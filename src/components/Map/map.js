@@ -437,6 +437,7 @@ const MapComponent = ({ setNotification }) => {
     const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
     const data = XLSX.utils.sheet_to_json(ws);
     console.log(data) // generate objects // update st
+    setEstimates(data);
 };
 
   return (
