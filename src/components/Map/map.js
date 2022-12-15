@@ -535,7 +535,7 @@ const MapComponent = ({setNotification}) => {
                                 size='large'
                                 variant="contained"         
                                 onClick={handleOnCalculate}
-                                xs={8}
+                                xs={5}
                             >
                                 Calcular
                             </Button>
