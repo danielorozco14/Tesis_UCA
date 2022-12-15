@@ -19,7 +19,7 @@ function Navbar() {
 
             </Link>
             <div className=" m-auto flex justify-center p-1">
-                <img src="/assets/img/marn.png" className="object-contain m-auto h-20" alt="" />
+                <img src="/assets/img/marn.png" className="object-contain m-auto h-20" alt="MARN" style={{height:"4.77rem"}} />
             </div>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
