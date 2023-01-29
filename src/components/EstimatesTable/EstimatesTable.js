@@ -19,22 +19,21 @@ export const EstimatesTable = ({ estimates }) => {
           loading={false}
           className="sm:rounded-lg"
           autoHeight={true}
-          loading={false}
         >
           <Table.Column align="center" width={250}>
             <Table.HeaderCell style={tableHeader}>Consumo</Table.HeaderCell>
             <Table.Cell dataKey="type" />
           </Table.Column>
-          {
+          
             <Table.Column width={250} align="center" fixed>
               <Table.HeaderCell style={tableHeader}>Cantidad</Table.HeaderCell>
               <Table.Cell dataKey="quantity" />
             </Table.Column>
-          }
+          
 
           <Table.Column align="center" width={250}>
             <Table.HeaderCell style={tableHeader}>Indice</Table.HeaderCell>
-            <Table.Cell dataKey="explotationIndex" />
+            <Table.Cell dataKey="explotationindex" />
           </Table.Column>
 
           <Table.Column width={250} align="center" fixed="right">

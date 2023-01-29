@@ -33,6 +33,7 @@ import {
 import ProjectsTable from "../ProjectsTable";
 import { EstimatesTable } from "../EstimatesTable/EstimatesTable";
 import * as XLSX from 'xlsx';
+import { useForm } from "../hooks/useForm";
 
 
 const MapComponent = ({ setNotification }) => {
@@ -48,6 +49,12 @@ const MapComponent = ({ setNotification }) => {
   let projectsLayer = new FeatureLayer({
     url: process.env.REACT_APP_PROYECTOS,
   });
+
+  const {formState, onInputChange} = useForm({
+    fileName: "",
+  });
+
+  const { fileName } = formState;
 
   const [allProjects, setAllProjectsInfo] = useState([]);
   const [projects, setProjectsInfo] = useState([]);
@@ -68,25 +75,30 @@ const MapComponent = ({ setNotification }) => {
   const [coeficiente, setCoeficiente] = useState(null);
 
   const [quantity, setQuantity] = useState(0);
-  const [explotationIndex, setExplotationIndex] = useState(0);
+  const [explotationindex, setExplotationindex] = useState(0.0);
   const [estado, setEstado] = useState("");
   const [estimates, setEstimates] = useState([]);
+  const [isVisible3, setIsVisible3] = useState(false);
+
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const onSubmit = data => console.log("data",data);
 
   useEffect(() => {
     switch (true) {
-      case (explotationIndex < 0.8):
+      case (explotationindex < 0.8):
         setEstado("Buen estado cuantitatvo")
         break;
-      case (explotationIndex > 0.8 && explotationIndex < 1):
+      case (explotationindex > 0.8 && explotationindex < 1):
         setEstado("En proceso de sobre-explotación")
         break;
-      case (explotationIndex > 1):
+      case (explotationindex > 1):
         setEstado("Sobre-explotación")
         break;
       default:
         break;
     }
-  }, [explotationIndex])
+  }, [explotationindex])
 
   useEffect(() => {
     switch (type) {
@@ -365,6 +377,7 @@ const MapComponent = ({ setNotification }) => {
         estado = "";
 
       cuencas.forEach((e) => {
+        console.log("e cuenca",e.attributes)
         if (e.attributes.volumen_m3) {
           volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
         }
@@ -406,6 +419,10 @@ const MapComponent = ({ setNotification }) => {
     setIsVisible(false);
   };
 
+  const onCloseDownload = () => {
+    setIsVisible3(false);
+  };
+
   const onClose2 = () => {
     setIsVisible2(false);
   };
@@ -417,10 +434,10 @@ const MapComponent = ({ setNotification }) => {
   const handleOnCalculate = () => {
     const volumenNumber = balance.volumen_cuenca.replace(/\,/g,'');
 
-    setExplotationIndex((quantity/volumenNumber * 1).toFixed(2));
-
-    setEstimates( estimate => [...estimates, {type,quantity,explotationIndex,estado} ]);
-
+    setExplotationindex((quantity/volumenNumber * 1).toFixed(2));
+    let test = (quantity/volumenNumber * 1).toFixed(2);
+    
+    setEstimates( estimate => [...estimates, {type,quantity,explotationindex:test,estado} ]);
     setIsVisible(false);
     setIsVisible2(true);
   };
@@ -461,7 +478,7 @@ const MapComponent = ({ setNotification }) => {
             >
               <div className="column textAlign">
                 <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"></div>
-
+                {console.log(balance)}
                 <div>{`Buscando en ${contadorCuencas}/${cuencas.length}`}</div>
               </div>
             </div>
@@ -547,9 +564,31 @@ const MapComponent = ({ setNotification }) => {
               mt={1}
             >
               <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible(true)}>Estimar</Button>
+
+              <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible3(true)}>Exportar</Button>
+              <Dialog
+                title={"Test"}
+                open={isVisible3}
+                onClose={onCloseDownload}
+                fullWidth={true}
+              >
+              
+              <Stack ml={2} direction="column" width="90%" height={500}>
+                <input 
+                  type="text"
+                  name="fileName"
+                  value={fileName}
+                  onChange = {onInputChange}
+                />
+              {console.log("fileName",fileName)}
+
+                <h1>Guardar como:</h1>
+                <ExportCSV csvData={estimates} fileName={fileName} />  
+              </Stack>
+              </Dialog>
+
               <Stack ml={2} direction="column" width="90%">
-                <ExportCSV csvData={estimates} fileName={"archivo"} />              
-                  <input className='form-control' type="file" accept="xlsx, xls" multiple="false" name="file"  style={{marginTop:"1rem", marginBottom:"1rem"}} onChange={changeHandler}/>                
+                <input className='form-control' type="file" accept="xlsx, xls" multiple="false" name="file"  style={{marginTop:"1rem", marginBottom:"1rem"}} onChange={changeHandler}/>                
               </Stack>
               
 
@@ -642,7 +681,7 @@ const MapComponent = ({ setNotification }) => {
                     Índice de explotación estimado:
                   </th>
                   <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
-                    {explotationIndex}
+                    {explotationindex}
                   </td>
                 </tr>
                 <tr className="border border-textmarn">
