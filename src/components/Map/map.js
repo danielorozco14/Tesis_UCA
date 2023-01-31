@@ -51,6 +51,7 @@ const MapComponent = ({ setNotification }) => {
   });
 
   const {formState, onInputChange} = useForm({
+    //Valor por defecto del nombre del archivo
     fileName: "",
   });
 
@@ -79,10 +80,8 @@ const MapComponent = ({ setNotification }) => {
   const [estado, setEstado] = useState("");
   const [estimates, setEstimates] = useState([]);
   const [isVisible3, setIsVisible3] = useState(false);
+  const [validacion, setValidacion] = useState(false)
 
-
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const onSubmit = data => console.log("data",data);
 
   useEffect(() => {
     switch (true) {
@@ -287,6 +286,7 @@ const MapComponent = ({ setNotification }) => {
   };
 
   const queryTributary = (results) => {
+    // console.log("resultsqyueryT",results)
     const parcelQuery = {
       where: createSqlQuery(results), // Set by select element
       outFields: ["OBJECTID", "Pfastetter", "volumen_m3"], // Attributes to return
@@ -296,6 +296,7 @@ const MapComponent = ({ setNotification }) => {
     layer
       .queryFeatures(parcelQuery)
       .then((resultsTributary) => {
+        console.log("resultributary",resultsTributary.attributes)
         setCuencas(resultsTributary.features);
 
         displayResult(resultsTributary);
@@ -377,13 +378,14 @@ const MapComponent = ({ setNotification }) => {
         estado = "";
 
       cuencas.forEach((e) => {
-        console.log("e cuenca",e.attributes)
+        // console.log("e cuenca",e.attributes)
         if (e.attributes.volumen_m3) {
           volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
         }
       }, this);
 
       projects.forEach((e) => {
+        // console.log("e proyecto",e)
         consumoProyectos = consumoProyectos + e.consumo_anual_m3;
       }, this);
 
@@ -573,17 +575,16 @@ const MapComponent = ({ setNotification }) => {
                 fullWidth={true}
               >
               
-              <Stack ml={2} direction="column" width="90%" height={500}>
+              <Stack ml={2} direction="column" width="90%" height={300}>
                 <input 
                   type="text"
                   name="fileName"
                   value={fileName}
                   onChange = {onInputChange}
+                  placeholder="Nombre del archivo"
                 />
-              {console.log("fileName",fileName)}
-
                 <h1>Guardar como:</h1>
-                <ExportCSV csvData={estimates} fileName={fileName} />  
+                <ExportCSV csvData={estimates} fileName={fileName} validacion={validacion}/>  
               </Stack>
               </Dialog>
 

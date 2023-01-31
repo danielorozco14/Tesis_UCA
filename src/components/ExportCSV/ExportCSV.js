@@ -4,7 +4,7 @@ import Button from 'rsuite/Button';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 
-export const ExportCSV = ({csvData, fileName, setNotification}) => {
+export const ExportCSV = ({csvData, fileName, setNotification, validacion}) => {
 
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
@@ -32,6 +32,7 @@ export const ExportCSV = ({csvData, fileName, setNotification}) => {
                     }
                 )
             }
-        }}>Exportar</Button>
+        }}
+        disabled={fileName.length > 1 ? false : true}>Exportar</Button>
     )
 }
