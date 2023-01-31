@@ -296,7 +296,6 @@ const MapComponent = ({ setNotification }) => {
     layer
       .queryFeatures(parcelQuery)
       .then((resultsTributary) => {
-        console.log("resultributary",resultsTributary.attributes)
         setCuencas(resultsTributary.features);
 
         displayResult(resultsTributary);
