@@ -17,7 +17,7 @@ import GraphicLayer from "@arcgis/core/layers/GraphicsLayer";
 import MapView from "@arcgis/core/views/MapView";
 import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from "../ProjectsTable";
-import { NumericFormat } from 'react-number-format';
+import { NumericFormat } from "react-number-format";
 import {
   Box,
   Dialog,
@@ -32,9 +32,8 @@ import {
 } from "@mui/material";
 import ProjectsTable from "../ProjectsTable";
 import { EstimatesTable } from "../EstimatesTable/EstimatesTable";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 import { useForm } from "../hooks/useForm";
-
 
 const MapComponent = ({ setNotification }) => {
   const mapRef = useRef();
@@ -50,13 +49,21 @@ const MapComponent = ({ setNotification }) => {
     url: process.env.REACT_APP_PROYECTOS,
   });
 
-  const {formState, onInputChange} = useForm({
+  const date = new Date();
+
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+
+  // This arrangement can be altered based on how we want the date's format to appear.
+  let currentDate = `${year}-${month}-${day}`;
+  const { formState, onInputChange } = useForm({
     //Valor por defecto del nombre del archivo
-    fileName: "",
+    fileName: "Archivo-" + currentDate,
   });
 
   const { fileName } = formState;
-
+  const [visualValue, setVisualValue] = useState(0);
   const [allProjects, setAllProjectsInfo] = useState([]);
   const [projects, setProjectsInfo] = useState([]);
   const [loadingProjects, setLoadingProjectsInfo] = useState(false);
@@ -80,24 +87,23 @@ const MapComponent = ({ setNotification }) => {
   const [estado, setEstado] = useState("");
   const [estimates, setEstimates] = useState([]);
   const [isVisible3, setIsVisible3] = useState(false);
-  const [validacion, setValidacion] = useState(false)
-
+  const [validacion, setValidacion] = useState(false);
 
   useEffect(() => {
     switch (true) {
-      case (explotationindex < 0.8):
-        setEstado("Buen estado cuantitatvo")
+      case explotationindex < 0.8:
+        setEstado("Buen estado cuantitatvo");
         break;
-      case (explotationindex > 0.8 && explotationindex < 1):
-        setEstado("En proceso de sobre-explotación")
+      case explotationindex > 0.8 && explotationindex < 1:
+        setEstado("En proceso de sobre-explotación");
         break;
-      case (explotationindex > 1):
-        setEstado("Sobre-explotación")
+      case explotationindex > 1:
+        setEstado("Sobre-explotación");
         break;
       default:
         break;
     }
-  }, [explotationindex])
+  }, [explotationindex]);
 
   useEffect(() => {
     switch (type) {
@@ -265,7 +271,7 @@ const MapComponent = ({ setNotification }) => {
       };
 
       let results = await projectsLayer.queryFeatures(projectQuery);
-
+      console.log(results);
       //console.log(filtro, contadorCuencas);
       allProjectsLocal = allProjectsLocal.concat(results.features);
       setContadorCuencas(i + 1);
@@ -433,18 +439,20 @@ const MapComponent = ({ setNotification }) => {
   };
 
   const handleOnCalculate = () => {
-    const volumenNumber = balance.volumen_cuenca.replace(/\,/g,'');
+    const volumenNumber = balance.volumen_cuenca.replace(/\,/g, "");
 
-    setExplotationindex((quantity/volumenNumber * 1).toFixed(2));
-    let test = (quantity/volumenNumber * 1).toFixed(2);
-    
-    setEstimates( estimate => [...estimates, {type,quantity,explotationindex:test,estado} ]);
+    setExplotationindex(((quantity / volumenNumber) * 1).toFixed(2));
+    let test = ((quantity / volumenNumber) * 1).toFixed(2);
+
+    setEstimates((estimate) => [
+      ...estimates,
+      { type, quantity, explotationindex: test, estado },
+    ]);
     setIsVisible(false);
     setIsVisible2(true);
   };
 
-  const changeHandler = async  (e) => {
-
+  const changeHandler = async (e) => {
     const myFile = e.target.files[0];
     // setIsFilePicked(true);
     // setSelectedFileType(e.target.files[0].type);
@@ -454,9 +462,14 @@ const MapComponent = ({ setNotification }) => {
 
     const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
     const data = XLSX.utils.sheet_to_json(ws);
-    console.log(data) // generate objects // update st
+    console.log(data); // generate objects // update st
     setEstimates(data);
-};
+  };
+
+  const handleChange = (e)=>{
+    setQuantity(e);
+    setVisualValue(e.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+  }
 
   return (
     <div className="container mx-auto">
@@ -560,37 +573,57 @@ const MapComponent = ({ setNotification }) => {
           </div>
 
           {balance && (
-            <Stack
-              width="100%"
-              mt={1}
-            >
-              <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible(true)}>Estimar</Button>
+            <Stack width="100%" mt={1}>
+              <Button
+                className={"m-5 bg-bgmarn text-textmarn"}
+                onClick={() => setIsVisible(true)}
+              >
+                Estimar
+              </Button>
 
-              <Button className={"m-5 bg-bgmarn text-textmarn"} onClick={() => setIsVisible3(true)}>Exportar</Button>
+              <Button
+                className={"m-5 bg-bgmarn text-textmarn"}
+                onClick={() => setIsVisible3(true)}
+              >
+                Exportar
+              </Button>
               <Dialog
                 title={"Test"}
                 open={isVisible3}
                 onClose={onCloseDownload}
                 fullWidth={true}
               >
-              
-              <Stack ml={2} direction="column" width="90%" height={300}>
-                <input 
-                  type="text"
-                  name="fileName"
-                  value={fileName}
-                  onChange = {onInputChange}
-                  placeholder="Nombre del archivo"
-                />
-                <h1>Guardar como:</h1>
-                <ExportCSV csvData={estimates} fileName={fileName} validacion={validacion}/>  
-              </Stack>
+                <Stack ml={2} direction="column" width="90%" height={150}>
+                  <h1>Guardar como:</h1>
+                  <input
+                    type="text"
+                    name="fileName"
+                    value={fileName}
+                    onChange={onInputChange}
+                    placeholder="Nombre del archivo"
+                    style={{
+                      marginBottom: "2px",
+                    }}
+                  />
+                  <ExportCSV
+                    csvData={estimates}
+                    fileName={fileName}
+                    validacion={validacion}
+                  />
+                </Stack>
               </Dialog>
 
               <Stack ml={2} direction="column" width="90%">
-                <input className='form-control' type="file" accept="xlsx, xls" multiple="false" name="file"  style={{marginTop:"1rem", marginBottom:"1rem"}} onChange={changeHandler}/>                
+                <input
+                  className="form-control"
+                  type="file"
+                  accept="xlsx, xls"
+                  multiple="false"
+                  name="file"
+                  style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                  onChange={changeHandler}
+                />
               </Stack>
-              
 
               <Dialog
                 title={"Test"}
@@ -627,14 +660,17 @@ const MapComponent = ({ setNotification }) => {
                 </Box> */}
 
                 <Box pl={2} mb={2}>
-                  <Typography mb={2}>Ingrese consumo en metros cúbicos m3:</Typography>
+                  <Typography mb={2}>
+                    Ingrese consumo en metros cúbicos m3:
+                  </Typography>
                   <TextField
                     id="standard-basic"
                     label="m3"
                     variant="standard"
                     type="number"
+                    value={visualValue}
                     required
-                    onChange={(e) => setQuantity(e.target.value)}
+                    onChange={(e) => handleChange(e.target.value)}
                   />
                 </Box>
 
@@ -652,11 +688,7 @@ const MapComponent = ({ setNotification }) => {
             </Stack>
           )}
 
-          <Dialog
-            title={"Test"}
-            open={isVisible2}
-            onClose={onClose2}
-          >
+          <Dialog title={"Test"} open={isVisible2} onClose={onClose2}>
             <div className="m-auto bg-white overflow-hidden shadow-x1 sm:rounded-lg">
               <table className="bg-bgmarn table-fixed">
                 <tr className="border border-textmarn">
@@ -673,7 +705,10 @@ const MapComponent = ({ setNotification }) => {
                   </th>
                   <td className="p-5 flex justify-center bg-bgmarn text-textmarn">
                     {/* <NumericFormat value={quantity} allowLeadingZeros thousandSeparator="," />; */}
-                    {quantity.toLocaleString('en-US', {minimumFractionDigits: 2})} m3
+                    {quantity.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}{" "}
+                    m3
                   </td>
                 </tr>
                 <tr className="border border-textmarn">
@@ -685,7 +720,9 @@ const MapComponent = ({ setNotification }) => {
                   </td>
                 </tr>
                 <tr className="border border-textmarn">
-                  <th className="py-4 bg-bgmarn text-textmarn">Estado estimado:</th>
+                  <th className="py-4 bg-bgmarn text-textmarn">
+                    Estado estimado:
+                  </th>
                   <td className="p-3 flex justify-center bg-bgmarn text-textmarn">
                     {estado}
                   </td>
@@ -693,22 +730,17 @@ const MapComponent = ({ setNotification }) => {
               </table>
             </div>
           </Dialog>
-
-
         </div>
       </div>
 
       <Grid container spacing={1} direction="row" mb={5}>
-          <div className={"row tableContainer"} >
-            <div className={"tableSpace"}>
-              <Table projects={projects} loading={loadingProjects}  /> 
-            </div>
-            {estimates.length > 0 && (  
-                <EstimatesTable estimates={estimates} />
-            )} 
+        <div className={"row tableContainer"}>
+          <div className={"tableSpace"}>
+            <Table projects={projects} loading={loadingProjects} />
           </div>
+          {estimates.length > 0 && <EstimatesTable estimates={estimates} />}
+        </div>
       </Grid>
-      
     </div>
   );
 };
