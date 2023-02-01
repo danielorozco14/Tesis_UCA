@@ -9,6 +9,8 @@ import { ExportCSV } from "../ExportCSV/ExportCSV";
 export const EstimatesTable = ({ estimates }) => {
 
   const tableHeader = {background:"#303845", color:"white", fontWeight: "900"};
+  console.log(estimates);
+  {/*estimates.quantity = estimates.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");*/}
   return (
     <div className="containerTable">
       <div>
