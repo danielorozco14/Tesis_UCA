@@ -11,12 +11,14 @@ import { createPointGL } from "./mapUtils";
 import { Dropdown, Input, Button } from "rsuite";
 import { ExportCSV } from "../ExportCSV/ExportCSV";
 import numeral from 'numeral';
+
 import ArcGIGMap from "@arcgis/core/Map";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import GraphicLayer from "@arcgis/core/layers/GraphicsLayer";
 import MapView from "@arcgis/core/views/MapView";
 import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from "../ProjectsTable";
+import { NumericFormat } from "react-number-format";
 import {
   Box,
   Dialog,
@@ -270,7 +272,7 @@ const MapComponent = ({ setNotification }) => {
       };
 
       let results = await projectsLayer.queryFeatures(projectQuery);
-      console.log(results);
+      // console.log(results);
       //console.log(filtro, contadorCuencas);
       allProjectsLocal = allProjectsLocal.concat(results.features);
       setContadorCuencas(i + 1);
@@ -283,7 +285,7 @@ const MapComponent = ({ setNotification }) => {
       }
     }
 
-    console.log(allProjectsLocal);
+    // console.log(allProjectsLocal);
 
     setAllProjectsInfo(allProjectsLocal);
 
@@ -450,9 +452,25 @@ const MapComponent = ({ setNotification }) => {
     setExplotationindex(((quantity / volumenNumber) * 1).toFixed(2));
     let test = ((quantity / volumenNumber) * 1).toFixed(2);
 
+    let indiceExplotacion = "";
+
+    switch (true) {
+      case test < 0.8:
+        indiceExplotacion = "Buen estado cuantitativo";
+        break;
+      case test >= 0.8 && test < 1:
+        indiceExplotacion = "En proceso de sobre-explotación";
+        break;
+      case test > 1:
+        indiceExplotacion = "Sobre-explotación";
+        break;
+      default:
+        break;
+    }
+
     setEstimates((estimate) => [
       ...estimates,
-      { type, quantity, explotationindex: test, estado, cuencaId },
+      { tipo_de_consumo:type, cantidad_de_consumo:quantity, indice_de_explotacion: test, estado:indiceExplotacion, id_cuenca:cuencaId },
     ]);
     setIsVisible(false); 
     setIsVisible2(true);
@@ -469,6 +487,7 @@ const MapComponent = ({ setNotification }) => {
     const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
     const data = XLSX.utils.sheet_to_json(ws);
     console.log(data); // generate objects // update st
+
     setEstimates(data);
   };
 
@@ -656,14 +675,11 @@ const MapComponent = ({ setNotification }) => {
                       </MenuItem>
                       <MenuItem value={"Industrial"}>Industrial</MenuItem>
                       <MenuItem value={"Agricola"}>Agricola</MenuItem>
+                      <MenuItem value={"Consumo Total"}>Consumo total</MenuItem>
+
                     </Select>
                   </FormControl>
                 </Box>
-                {/* <Box pl={2}>
-                  <Typography mb={2}>
-                    Coeficiente de TODO: {coeficiente}
-                  </Typography>
-                </Box> */}
 
                 <Box pl={2} mb={2}>
                   <Typography mb={2}>
@@ -713,7 +729,7 @@ const MapComponent = ({ setNotification }) => {
                     {/* <NumericFormat value={quantity} allowLeadingZeros thousandSeparator="," />; */}
                     {/*quantity.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
-                    })}{" " */}
+                    })}{" "*/}
                     {numeral(quantity).format('0,0')}
                     m3
                   </td>
