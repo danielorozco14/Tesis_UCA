@@ -10,14 +10,13 @@ import {
 import { createPointGL } from "./mapUtils";
 import { Dropdown, Input, Button } from "rsuite";
 import { ExportCSV } from "../ExportCSV/ExportCSV";
-
+import numeral from 'numeral';
 import ArcGIGMap from "@arcgis/core/Map";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import GraphicLayer from "@arcgis/core/layers/GraphicsLayer";
 import MapView from "@arcgis/core/views/MapView";
 import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from "../ProjectsTable";
-import { NumericFormat } from "react-number-format";
 import {
   Box,
   Dialog,
@@ -640,7 +639,7 @@ const MapComponent = ({ setNotification }) => {
               >
                 <Box mt={2} p={2}>
                   <Typography mb={2}>
-                    Seleccione tipo de industria TODO:
+                    Seleccione tipo de industria:
                   </Typography>
 
                   <FormControl fullWidth>
@@ -712,9 +711,10 @@ const MapComponent = ({ setNotification }) => {
                   </th>
                   <td className="p-5 flex justify-center bg-bgmarn text-textmarn">
                     {/* <NumericFormat value={quantity} allowLeadingZeros thousandSeparator="," />; */}
-                    {quantity.toLocaleString("en-US", {
+                    {/*quantity.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
-                    })}{" "}
+                    })}{" " */}
+                    {numeral(quantity).format('0,0')}
                     m3
                   </td>
                 </tr>
