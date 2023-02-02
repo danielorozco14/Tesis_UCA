@@ -2,6 +2,7 @@ import React from "react";
 import "./../ProjectsTable/index.css";
 
 import { Header, Pagination } from "rsuite";
+import numeral from 'numeral';
 
 import Table from "rsuite/Table";
 import { ExportCSV } from "../ExportCSV/ExportCSV";
@@ -10,7 +11,7 @@ export const EstimatesTable = ({ estimates }) => {
 
   const tableHeader = {background:"#303845", color:"white", fontWeight: "900"};
   console.log(estimates);
-  {/*estimates.quantity = estimates.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");*/}
+  estimates[0].quantity = numeral(estimates[0].quantity).format('0,0');
   return (
     <div className="containerTable">
         <Table
