@@ -1,19 +1,25 @@
 {
   "name": "tesis",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "@arcgis/core": "^4.21.2",
     "@craco/craco": "^6.4.0",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "@material-ui/core": "^4.12.3",
+    "@mui/material": "^5.10.9",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "file-saver": "^2.0.5",
     "ncp": "^2.0.0",
+    "numeral": "^2.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.42.1",
     "react-icons": "^4.3.1",
+    "react-number-format": "^5.0.1",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "rsuite": "^5.1.0",
@@ -34,12 +40,10 @@
     ]
   },
   "browserslist": [
-
     ">0.2%",
     "not dead",
     "not op_mini all"
-    
-    ],
+  ],
   "devDependencies": {
     "autoprefixer": "^9.8.8",
     "postcss": "^7.0.39",
