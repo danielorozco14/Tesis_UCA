@@ -11,7 +11,9 @@ export const EstimatesTable = ({ estimates }) => {
 
   const tableHeader = {background:"#303845", color:"white", fontWeight: "900"};
   console.log(estimates);
-  estimates[0].quantity = numeral(estimates[0].quantity).format('0,0');
+  for(let i = 0; i < estimates.length; i++){
+    estimates[i].quantity = numeral(estimates[i].quantity).format('0,0');
+  }
   return (
     <div className="containerTable">
         <Table
