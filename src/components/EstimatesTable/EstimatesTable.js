@@ -13,15 +13,21 @@ export const EstimatesTable = ({ estimates }) => {
   {/*estimates.quantity = estimates.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");*/}
   return (
     <div className="containerTable">
-      <div>
         <Table
-          width={1000}
+        wordWrap="break-word"
+          width={1250}
           height={400}
           data={estimates}
           loading={false}
           className="sm:rounded-lg"
           autoHeight={true}
         >
+          <Table.Column width={250} align="center" fixed="right">
+            <Table.HeaderCell style={tableHeader}>
+              Identificacion de cuenca
+            </Table.HeaderCell>
+            <Table.Cell dataKey="cuencaId" />
+          </Table.Column>
           <Table.Column align="center" width={250}>
             <Table.HeaderCell style={tableHeader}>Consumo</Table.HeaderCell>
             <Table.Cell dataKey="type" />
@@ -44,6 +50,8 @@ export const EstimatesTable = ({ estimates }) => {
             </Table.HeaderCell>
             <Table.Cell dataKey="estado" />
           </Table.Column>
+
+          
           {/* <Table.Column>
                   <Table.HeaderCell style={tableHeader} >
                       <ExportCSV csvData={projects} fileName={"archivo"} />
@@ -52,25 +60,6 @@ export const EstimatesTable = ({ estimates }) => {
               </Table.Column>*/}
         </Table>
 
-        {/* <div style={{ padding: 12 }}>
-          {data.length === 0 ? null : (
-            <Pagination
-              prev
-              next
-              boundaryLinks
-              maxButtons={5}
-              size="md"
-              layout={["total", "-", "limit", "|", "pager", "skip"]}
-              total={projects.length}
-              limitOptions={[10, 20]}
-              limit={limit}
-              activePage={page}
-              onChangePage={setPage}
-              onChangeLimit={handleChangeLimit}
-            />
-          )}
-        </div> */}
-      </div>
     </div>
   );
 };

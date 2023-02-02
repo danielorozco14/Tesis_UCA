@@ -88,6 +88,7 @@ const MapComponent = ({ setNotification }) => {
   const [estimates, setEstimates] = useState([]);
   const [isVisible3, setIsVisible3] = useState(false);
   const [validacion, setValidacion] = useState(false);
+  const [ cuencaId, setCuencaId] = useState("");
 
   useEffect(() => {
     switch (true) {
@@ -223,7 +224,7 @@ const MapComponent = ({ setNotification }) => {
     const parcelQuery = {
       spatialRelationship: "intersects", // Relationship operation to apply
       geometry: geometry, // The sketch feature geometry
-      outFields: ["OBJECTID", "Pfastetter", "volumen_m3"], // Attributes to return
+      outFields: ["OBJECTID", "Pfastetter", "volumen_m3","nombre_rio"], // Attributes to return
       returnGeometry: true,
     };
 
@@ -231,7 +232,6 @@ const MapComponent = ({ setNotification }) => {
       .queryFeatures(parcelQuery)
       .then((results) => {
         //setCuencas(results.features);
-
         if (results.features.length > 0) {
           let array = [];
 
@@ -292,10 +292,10 @@ const MapComponent = ({ setNotification }) => {
   };
 
   const queryTributary = (results) => {
-    // console.log("resultsqyueryT",results)
+
     const parcelQuery = {
       where: createSqlQuery(results), // Set by select element
-      outFields: ["OBJECTID", "Pfastetter", "volumen_m3"], // Attributes to return
+      outFields: ["OBJECTID", "Pfastetter", "volumen_m3","nombre_rio"], // Attributes to return
       returnGeometry: true,
     };
 
@@ -380,17 +380,23 @@ const MapComponent = ({ setNotification }) => {
       let consumoProyectos = 0,
         volumen_cuencas = 0,
         indice = 0,
-        estado = "";
+        estado = "",
+        listaCuencas =[];
 
       cuencas.forEach((e) => {
-        // console.log("e cuenca",e.attributes)
+        let cuenca = "";
         if (e.attributes.volumen_m3) {
           volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
+        }if(e.attributes.Nombre_Rio){
+          cuenca =  e.attributes.Nombre_Rio +" - "+ "Codigo de cuenca:" + e.attributes.Pfastetter
+        }else{
+          cuenca =  "Codigo de cuenca:" + e.attributes.Pfastetter
         }
+
+        listaCuencas.push(cuenca);
       }, this);
 
       projects.forEach((e) => {
-        // console.log("e proyecto",e)
         consumoProyectos = consumoProyectos + e.consumo_anual_m3;
       }, this);
 
@@ -412,6 +418,7 @@ const MapComponent = ({ setNotification }) => {
         anual: Intl.NumberFormat().format(consumoProyectos / volumen_cuencas),
         estado,
       });
+      setCuencaId(listaCuencas[0]);
     }
   };
 
@@ -446,9 +453,9 @@ const MapComponent = ({ setNotification }) => {
 
     setEstimates((estimate) => [
       ...estimates,
-      { type, quantity, explotationindex: test, estado },
+      { type, quantity, explotationindex: test, estado, cuencaId },
     ]);
-    setIsVisible(false);
+    setIsVisible(false); 
     setIsVisible2(true);
   };
 
@@ -468,7 +475,7 @@ const MapComponent = ({ setNotification }) => {
 
   const handleChange = (e)=>{
     setQuantity(e);
-    setVisualValue(e.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+    // setVisualValue(e.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
   }
 
   return (
@@ -492,7 +499,7 @@ const MapComponent = ({ setNotification }) => {
             >
               <div className="column textAlign">
                 <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"></div>
-                {console.log(balance)}
+                {/* {console.log(balance)} */}
                 <div>{`Buscando en ${contadorCuencas}/${cuencas.length}`}</div>
               </div>
             </div>
@@ -668,9 +675,9 @@ const MapComponent = ({ setNotification }) => {
                     label="m3"
                     variant="standard"
                     type="number"
-                    value={visualValue}
+                    // value={setQuantity}
                     required
-                    onChange={(e) => handleChange(e.target.value)}
+                    onChange={(e) => setQuantity(e.target.value)}
                   />
                 </Box>
 
