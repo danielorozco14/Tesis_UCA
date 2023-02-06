@@ -22,6 +22,10 @@ import { NumericFormat } from "react-number-format";
 import {
   Box,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
@@ -90,6 +94,7 @@ const MapComponent = ({ setNotification }) => {
   const [isVisible3, setIsVisible3] = useState(false);
   const [validacion, setValidacion] = useState(false);
   const [ cuencaId, setCuencaId] = useState("");
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   useEffect(() => {
     switch (true) {
@@ -144,6 +149,7 @@ const MapComponent = ({ setNotification }) => {
 
     sketch.on("update", (event) => {
       if (event.state === "start") {
+      setIsAlertVisible(true);
         setLoadingProjectsInfo(true);
 
         setQueryGraphic(event.graphics[0].geometry);
@@ -179,6 +185,13 @@ const MapComponent = ({ setNotification }) => {
       makeSpatialQuery(queryGraphic);
     }
   }, [queryGraphic]);
+
+  const onAcceptDialog = (event) => {
+
+    setLoadingProjectsInfo(true);
+
+    setQueryGraphic(event.graphics[0].geometry);
+  }
 
   const createPointAndQuery = () => {
     console.log(`lat: ${point.lat}, long: ${point.long}`);
@@ -422,6 +435,10 @@ const MapComponent = ({ setNotification }) => {
       setCuencaId(listaCuencas[0]);
     }
   };
+
+  const handleCloseAlertVisible = () =>{
+    setIsAlertVisible(false);
+  }
 
   const clearInfo = () => {
     mapView.popup.close();
@@ -755,6 +772,26 @@ const MapComponent = ({ setNotification }) => {
           </Dialog>
         </div>
       </div>
+
+      <Dialog
+        open={isAlertVisible}
+        onClose={handleCloseAlertVisible}
+      >
+        <DialogTitle>
+          {"Alerta"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Se ha seleccionado una nueva cuenca.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          {/* <Button onClick={handleCloseAlertVisible}>Disagree</Button> */}
+          <Button onClick={handleCloseAlertVisible} autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Grid container spacing={1} direction="row" mb={5}>
         <div className={"row tableContainer"}>
